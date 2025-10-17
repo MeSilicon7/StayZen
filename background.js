@@ -21,11 +21,13 @@ let siteTrackingInterval = null; // Interval for continuous tracking
 let customQuote = ""; // User's custom quote
 let pomodoroBreakQuote = ""; // Custom quote for break time
 let pomodoroFocusQuote = ""; // Custom quote for focus time
+let blockerQuote = ""; // Custom quote for blocked sites
 
 // Default inspirational quotes
-const defaultQuote = "🧘 Take a deep breath. Focus on what truly matters.";
+const defaultQuote = "Take a deep breath. Focus on what truly matters.";
 const defaultBreakQuote = "🌸 Take a moment to breathe. You've earned this rest.";
 const defaultFocusQuote = "🚀 Ready to conquer your goals? Let's focus and make it happen!";
+const defaultBlockerQuote = "Take a deep breath. This is your time to focus on what truly matters.";
 
 /**
  * Load settings from storage
@@ -41,6 +43,7 @@ async function loadSettings() {
     customQuote = settings.customQuote || defaultQuote;
     pomodoroBreakQuote = settings.pomodoroBreakQuote || defaultBreakQuote;
     pomodoroFocusQuote = settings.pomodoroFocusQuote || defaultFocusQuote;
+    blockerQuote = settings.blockerQuote || defaultBlockerQuote;
     
     // Update remaining time if not running
     if (!pomodoroState.isRunning) {
@@ -70,7 +73,8 @@ browser.runtime.onInstalled.addListener(async () => {
       enableWarnings: true,
       customQuote: defaultQuote,
       pomodoroBreakQuote: defaultBreakQuote,
-      pomodoroFocusQuote: defaultFocusQuote
+      pomodoroFocusQuote: defaultFocusQuote,
+      blockerQuote: defaultBlockerQuote
     }
   };
   
@@ -385,6 +389,10 @@ browser.runtime.onMessage.addListener((message, sender, sendResponse) => {
     case 'checkBlocked':
       checkIfBlocked(message.url).then(result => sendResponse(result));
       return true; // Keep channel open for async response
+    
+    case 'getBlockerQuote':
+      sendResponse({ quote: blockerQuote || defaultBlockerQuote });
+      break;
       
     case 'reloadSettings':
       loadSettings().then(() => {

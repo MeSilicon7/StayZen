@@ -9,7 +9,7 @@
 <body>
   <div class="container">
     <header>
-      <h1>🧘 StayZen Settings</h1>
+      <h1>StayZen Settings</h1>
       <p class="subtitle">Customize your focus experience</p>
     </header>
 
@@ -89,6 +89,19 @@
             placeholder="🧘 Take a deep breath. Focus on what truly matters."
             maxlength="200"></textarea>
           <span class="char-count"><span id="quoteCharCount">0</span>/200</span>
+        </div>
+
+        <div class="setting-item">
+          <label for="blockerQuote">
+            <span class="label-text">Blocked Site Quote</span>
+            <span class="label-description">Message shown when accessing a blocked site</span>
+          </label>
+          <textarea 
+            id="blockerQuote" 
+            rows="3" 
+            placeholder="Take a deep breath. This is your time to focus on what truly matters."
+            maxlength="200"></textarea>
+          <span class="char-count"><span id="blockerQuoteCharCount">0</span>/200</span>
         </div>
       </section>
 

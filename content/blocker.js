@@ -18,7 +18,7 @@
       });
       
       if (response.isBlocked) {
-        showBlockedPage();
+        await showBlockedPage();
         
         // Update stats
         const { dailyStats } = await browser.storage.local.get('dailyStats');
@@ -33,7 +33,18 @@
   /**
    * Show blocked page overlay
    */
-  function showBlockedPage() {
+  async function showBlockedPage() {
+    // Get custom blocker quote from background script
+    let customQuote = "Take a deep breath. This is your time to focus on what truly matters.";
+    try {
+      const response = await browser.runtime.sendMessage({ action: 'getBlockerQuote' });
+      if (response && response.quote) {
+        customQuote = response.quote;
+      }
+    } catch (error) {
+      console.error('StayZen: Error fetching blocker quote', error);
+    }
+
     document.documentElement.innerHTML = `
       <!DOCTYPE html>
       <html>
@@ -54,10 +65,6 @@
             text-align: center;
             padding: 40px;
           }
-          .icon {
-            font-size: 80px;
-            margin-bottom: 20px;
-          }
           h1 {
             font-size: 36px;
             margin-bottom: 10px;
@@ -77,12 +84,10 @@
         </style>
       </head>
       <body>
-        <div class="blocked-container">
-          <div class="icon">🧘</div>
-          <h1>Focus Mode Active</h1>
+        <div class="blocked-container">          <h1>Focus Mode Active</h1>
           <p>This site is blocked to help you stay focused.</p>
           <div class="message">
-            <p>Take a deep breath. This is your time to focus on what truly matters.</p>
+            <p>${customQuote}</p>
             <p style="font-size: 14px; opacity: 0.8;">
               You can manage blocked sites from the StayZen extension popup.
             </p>
