@@ -1,4 +1,4 @@
-# 🧘 StayZen
+# StayZen
 
 **Stay calm, stay focused** - A Firefox browser extension to block distractions and track productivity with Pomodoro timers.
 
