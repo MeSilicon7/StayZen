@@ -22,6 +22,8 @@ let customQuote = ""; // User's custom quote
 let pomodoroBreakQuote = ""; // Custom quote for break time
 let pomodoroFocusQuote = ""; // Custom quote for focus time
 let blockerQuote = ""; // Custom quote for blocked sites
+let autoBlockImages = false; // Auto-block images setting
+let autoBlockTimer = null; // Timer for auto-blocking images
 
 // Default inspirational quotes
 const defaultQuote = "Take a deep breath. Focus on what truly matters.";
@@ -40,6 +42,7 @@ async function loadSettings() {
     pomodoroState.breakTime = (settings.breakTime || 5) * 60;
     warningThreshold = (settings.warningTime || 5) * 60;
     warningsEnabled = settings.enableWarnings !== undefined ? settings.enableWarnings : true;
+    autoBlockImages = settings.autoBlockImages !== undefined ? settings.autoBlockImages : false;
     customQuote = settings.customQuote || defaultQuote;
     pomodoroBreakQuote = settings.pomodoroBreakQuote || defaultBreakQuote;
     pomodoroFocusQuote = settings.pomodoroFocusQuote || defaultFocusQuote;
@@ -50,7 +53,7 @@ async function loadSettings() {
       pomodoroState.remainingTime = pomodoroState.focusTime;
     }
     
-    console.log(`StayZen: Settings loaded - Warning: ${warningThreshold}s`);
+    console.log(`StayZen: Settings loaded - Auto-block images: ${autoBlockImages}`);
   }
 }
 
@@ -71,6 +74,7 @@ browser.runtime.onInstalled.addListener(async () => {
       breakTime: 5,
       warningTime: 5,
       enableWarnings: true,
+      autoBlockImages: false,
       customQuote: defaultQuote,
       pomodoroBreakQuote: defaultBreakQuote,
       pomodoroFocusQuote: defaultFocusQuote,
@@ -364,6 +368,50 @@ function trackSiteUsage(url) {
 }
 
 /**
+ * Start auto-block timer (1 minute)
+ */
+function startAutoBlockTimer() {
+  // Clear any existing timer
+  if (autoBlockTimer) {
+    clearTimeout(autoBlockTimer);
+  }
+  
+  if (!autoBlockImages) {
+    return; // Auto-block is disabled
+  }
+  
+  console.log('StayZen: Auto-block timer started (1 minute)');
+  
+  autoBlockTimer = setTimeout(async () => {
+    // Re-enable image blocking
+    await browser.storage.local.set({ imageBlockingEnabled: true });
+    
+    // Notify all tabs to block images
+    const tabs = await browser.tabs.query({});
+    tabs.forEach(tab => {
+      browser.tabs.sendMessage(tab.id, {
+        action: 'toggleImages',
+        enabled: true
+      }).catch(() => {});
+    });
+    
+    console.log('StayZen: Auto-blocked images after 1 minute');
+    autoBlockTimer = null;
+  }, 60000); // 1 minute = 60000ms
+}
+
+/**
+ * Cancel auto-block timer
+ */
+function cancelAutoBlockTimer() {
+  if (autoBlockTimer) {
+    clearTimeout(autoBlockTimer);
+    autoBlockTimer = null;
+    console.log('StayZen: Auto-block timer cancelled');
+  }
+}
+
+/**
  * Message Handling from popup and content scripts
  */
 browser.runtime.onMessage.addListener((message, sender, sendResponse) => {
@@ -394,6 +442,17 @@ browser.runtime.onMessage.addListener((message, sender, sendResponse) => {
       sendResponse({ quote: blockerQuote || defaultBlockerQuote });
       break;
       
+    case 'imageBlockingChanged':
+      if (message.enabled) {
+        // Images are being blocked, cancel timer
+        cancelAutoBlockTimer();
+      } else {
+        // Images are being unblocked, start 1-minute timer
+        startAutoBlockTimer();
+      }
+      sendResponse({ success: true });
+      break;
+    
     case 'reloadSettings':
       loadSettings().then(() => {
         // Reset last warning time when settings change (but keep totalTime)

@@ -126,6 +126,12 @@ async function toggleImageBlocking() {
   const enabled = imageToggle.checked;
   await browser.storage.local.set({ imageBlockingEnabled: enabled });
   
+  // Notify background script about the change
+  await browser.runtime.sendMessage({
+    action: 'imageBlockingChanged',
+    enabled: enabled
+  });
+  
   // Notify all tabs to update
   const tabs = await browser.tabs.query({});
   tabs.forEach(tab => {

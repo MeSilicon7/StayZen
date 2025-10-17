@@ -7,6 +7,7 @@
 - **Pomodoro Timer** - Customizable focus and break sessions with motivational quotes
 - **Site Blocker** - Block distracting websites with custom inspirational messages
 - **Image Blocker** - Hide images and videos to reduce visual distractions
+  - **Auto-block** - Automatically re-enable blocking 1 minute after disabling
 - **Usage Tracker** - Monitor time spent on websites with customizable warnings
 - **Daily Stats** - Track your focus time and blocked sites
 
@@ -23,6 +24,7 @@ Access settings by clicking the ⚙️ icon in the popup or through the browser'
 
 - **Pomodoro Duration** - Set custom focus and break times
 - **Warning Time** - Configure when usage warnings appear
+- **Auto-block Images** - Automatically re-enable image blocking after 1 minute
 - **Custom Quotes** - Personalize all motivational messages:
   - Focus start quote
   - Break start quote

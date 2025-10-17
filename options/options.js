@@ -8,6 +8,7 @@ const focusTimeInput = document.getElementById('focusTime');
 const breakTimeInput = document.getElementById('breakTime');
 const warningTimeInput = document.getElementById('warningTime');
 const enableWarningsCheckbox = document.getElementById('enableWarnings');
+const autoBlockImagesCheckbox = document.getElementById('autoBlockImages');
 const customQuoteTextarea = document.getElementById('customQuote');
 const pomodoroFocusQuoteTextarea = document.getElementById('pomodoroFocusQuote');
 const pomodoroBreakQuoteTextarea = document.getElementById('pomodoroBreakQuote');
@@ -26,6 +27,7 @@ const DEFAULT_SETTINGS = {
   breakTime: 5,
   warningTime: 5,
   enableWarnings: true,
+  autoBlockImages: false,
   customQuote: "🧘 Take a deep breath. Focus on what truly matters.",
   pomodoroBreakQuote: "🌸 Take a moment to breathe. You've earned this rest.",
   pomodoroFocusQuote: "🚀 Ready to conquer your goals? Let's focus and make it happen!",
@@ -54,6 +56,9 @@ async function loadSettings() {
       enableWarningsCheckbox.checked = settings.enableWarnings !== undefined 
         ? settings.enableWarnings 
         : DEFAULT_SETTINGS.enableWarnings;
+      autoBlockImagesCheckbox.checked = settings.autoBlockImages !== undefined
+        ? settings.autoBlockImages
+        : DEFAULT_SETTINGS.autoBlockImages;
       customQuoteTextarea.value = settings.customQuote || DEFAULT_SETTINGS.customQuote;
       pomodoroFocusQuoteTextarea.value = settings.pomodoroFocusQuote || DEFAULT_SETTINGS.pomodoroFocusQuote;
       pomodoroBreakQuoteTextarea.value = settings.pomodoroBreakQuote || DEFAULT_SETTINGS.pomodoroBreakQuote;
@@ -78,6 +83,7 @@ async function saveSettings(customSettings = null) {
       breakTime: parseInt(breakTimeInput.value),
       warningTime: parseInt(warningTimeInput.value),
       enableWarnings: enableWarningsCheckbox.checked,
+      autoBlockImages: autoBlockImagesCheckbox.checked,
       customQuote: customQuoteTextarea.value.trim() || DEFAULT_SETTINGS.customQuote,
       pomodoroFocusQuote: pomodoroFocusQuoteTextarea.value.trim() || DEFAULT_SETTINGS.pomodoroFocusQuote,
       pomodoroBreakQuote: pomodoroBreakQuoteTextarea.value.trim() || DEFAULT_SETTINGS.pomodoroBreakQuote,
@@ -124,6 +130,7 @@ async function resetSettings() {
     breakTimeInput.value = DEFAULT_SETTINGS.breakTime;
     warningTimeInput.value = DEFAULT_SETTINGS.warningTime;
     enableWarningsCheckbox.checked = DEFAULT_SETTINGS.enableWarnings;
+    autoBlockImagesCheckbox.checked = DEFAULT_SETTINGS.autoBlockImages;
     customQuoteTextarea.value = DEFAULT_SETTINGS.customQuote;
     pomodoroFocusQuoteTextarea.value = DEFAULT_SETTINGS.pomodoroFocusQuote;
     pomodoroBreakQuoteTextarea.value = DEFAULT_SETTINGS.pomodoroBreakQuote;
