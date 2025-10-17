@@ -19,9 +19,13 @@ let warningsEnabled = true;
 let currentActiveTab = null; // Track currently active tab
 let siteTrackingInterval = null; // Interval for continuous tracking
 let customQuote = ""; // User's custom quote
+let pomodoroBreakQuote = ""; // Custom quote for break time
+let pomodoroFocusQuote = ""; // Custom quote for focus time
 
-// Default inspirational quote
+// Default inspirational quotes
 const defaultQuote = "🧘 Take a deep breath. Focus on what truly matters.";
+const defaultBreakQuote = "🌸 Take a moment to breathe. You've earned this rest.";
+const defaultFocusQuote = "🚀 Ready to conquer your goals? Let's focus and make it happen!";
 
 /**
  * Load settings from storage
@@ -35,13 +39,15 @@ async function loadSettings() {
     warningThreshold = (settings.warningTime || 5) * 60;
     warningsEnabled = settings.enableWarnings !== undefined ? settings.enableWarnings : true;
     customQuote = settings.customQuote || defaultQuote;
+    pomodoroBreakQuote = settings.pomodoroBreakQuote || defaultBreakQuote;
+    pomodoroFocusQuote = settings.pomodoroFocusQuote || defaultFocusQuote;
     
     // Update remaining time if not running
     if (!pomodoroState.isRunning) {
       pomodoroState.remainingTime = pomodoroState.focusTime;
     }
     
-    console.log(`StayZen: Settings loaded - Warning: ${warningThreshold}s, Quote: "${customQuote}"`);
+    console.log(`StayZen: Settings loaded - Warning: ${warningThreshold}s`);
   }
 }
 
@@ -62,7 +68,9 @@ browser.runtime.onInstalled.addListener(async () => {
       breakTime: 5,
       warningTime: 5,
       enableWarnings: true,
-      customQuote: defaultQuote
+      customQuote: defaultQuote,
+      pomodoroBreakQuote: defaultBreakQuote,
+      pomodoroFocusQuote: defaultFocusQuote
     }
   };
   
@@ -101,29 +109,32 @@ function startPomodoro() {
     // Update badge with remaining minutes
     const minutes = Math.ceil(pomodoroState.remainingTime / 60);
     browser.action.setBadgeText({ text: `${minutes}` });
-    browser.action.setBadgeBackgroundColor({ color: pomodoroState.isBreak ? '#4CAF50' : '#FF6B6B' });
+    browser.action.setBadgeBackgroundColor({ color: pomodoroState.isBreak ? '#4CAF50' : '#1877F2' });
     
     if (pomodoroState.remainingTime <= 0) {
       clearInterval(timerInterval);
       pomodoroState.isRunning = false;
       
-      // Show notification
       if (pomodoroState.isBreak) {
-        browser.notifications.create({
-          type: 'basic',
-          iconUrl: 'icons/icon-128.png',
+        // Break is over, time to focus
+        await showPomodoroModal({
+          type: 'focus',
           title: 'Break Over! 🧘',
-          message: 'Time to focus again. Let\'s go!'
+          message: pomodoroFocusQuote || defaultFocusQuote,
+          duration: pomodoroState.breakTime / 60
         });
+        
         pomodoroState.isBreak = false;
         pomodoroState.remainingTime = pomodoroState.focusTime;
       } else {
-        browser.notifications.create({
-          type: 'basic',
-          iconUrl: 'icons/icon-128.png',
+        // Focus session complete, time for break
+        await showPomodoroModal({
+          type: 'break',
           title: 'Focus Session Complete! 🎉',
-          message: 'Take a 5-minute break. You earned it!'
+          message: pomodoroBreakQuote || defaultBreakQuote,
+          duration: pomodoroState.focusTime / 60
         });
+        
         pomodoroState.isBreak = true;
         pomodoroState.remainingTime = pomodoroState.breakTime;
         
@@ -138,12 +149,35 @@ function startPomodoro() {
   }, 1000);
 }
 
-function stopPomodoro() {
-  pomodoroState.isRunning = false;
-  clearInterval(timerInterval);
-  browser.action.setBadgeText({ text: '' });
-  pomodoroState.remainingTime = pomodoroState.focusTime;
-  pomodoroState.isBreak = false;
+/**
+ * Show Pomodoro completion modal
+ */
+async function showPomodoroModal(data) {
+  const { type, title, message, duration } = data;
+  
+  // Send to active tab to show modal
+  try {
+    const tabs = await browser.tabs.query({ active: true, currentWindow: true });
+    if (tabs.length > 0 && tabs[0].id) {
+      await browser.tabs.sendMessage(tabs[0].id, {
+        action: 'showPomodoroModal',
+        type: type,
+        title: title,
+        message: message,
+        duration: Math.floor(duration)
+      });
+      console.log(`StayZen: Pomodoro modal shown (${type})`);
+    }
+  } catch (error) {
+    console.error('StayZen: Error showing Pomodoro modal', error);
+    // Fallback to browser notification
+    browser.notifications.create({
+      type: 'basic',
+      iconUrl: 'icons/icon-128.png',
+      title: title,
+      message: message
+    });
+  }
 }
 
 /**
@@ -361,4 +395,3 @@ async function checkIfBlocked(url) {
   const domain = new URL(url).hostname;
   return { isBlocked: blockedSites.some(site => domain.includes(site)) };
 }
- 

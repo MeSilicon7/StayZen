@@ -32,6 +32,32 @@
           </label>
           <input type="number" id="breakTime" min="1" max="60" value="5">
         </div>
+
+        <div class="setting-item">
+          <label for="pomodoroFocusQuote">
+            <span class="label-text">Focus Start Quote</span>
+            <span class="label-description">Message shown when break ends and it's time to focus</span>
+          </label>
+          <textarea 
+            id="pomodoroFocusQuote" 
+            rows="2" 
+            placeholder="🚀 Ready to conquer your goals? Let's focus and make it happen!"
+            maxlength="200"></textarea>
+          <span class="char-count"><span id="focusQuoteCharCount">0</span>/200</span>
+        </div>
+
+        <div class="setting-item">
+          <label for="pomodoroBreakQuote">
+            <span class="label-text">Break Start Quote</span>
+            <span class="label-description">Message shown when focus session completes</span>
+          </label>
+          <textarea 
+            id="pomodoroBreakQuote" 
+            rows="2" 
+            placeholder="🌸 Take a moment to breathe. You've earned this rest."
+            maxlength="200"></textarea>
+          <span class="char-count"><span id="breakQuoteCharCount">0</span>/200</span>
+        </div>
       </section>
 
       <!-- Site Usage Tracker Settings -->

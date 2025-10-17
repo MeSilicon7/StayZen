@@ -27,6 +27,8 @@
   browser.runtime.onMessage.addListener((message) => {
     if (message.action === 'showTimeWarning') {
       showTimeWarningModal(message);
+    } else if (message.action === 'showPomodoroModal') {
+      showPomodoroModal(message);
     }
   });
 
@@ -173,6 +175,192 @@
     setTimeout(closeModal, 10000);
     
     console.log(`StayZen: Modal shown for ${domain}`);
+  }
+
+  /**
+   * Show Pomodoro completion modal (SweetAlert2 style)
+   */
+  function showPomodoroModal(data) {
+    const { type, title, message, duration } = data;
+    
+    // Remove existing modal if any
+    const existingModal = document.getElementById('stayzen-pomodoro-modal');
+    if (existingModal) existingModal.remove();
+    
+    // Determine colors based on type
+    const isBreak = type === 'break';
+    const iconColor = isBreak ? '#42B883' : '#1877F2';
+    const icon = isBreak ? '🎉' : '🧘';
+    const buttonColor = isBreak ? '#42B883' : '#1877F2';
+    const buttonHoverColor = isBreak ? '#36A372' : '#166FE5';
+    
+    // Create modal overlay
+    const modalOverlay = document.createElement('div');
+    modalOverlay.id = 'stayzen-pomodoro-modal';
+    modalOverlay.innerHTML = `
+      <style>
+        #stayzen-pomodoro-modal {
+          position: fixed;
+          top: 0;
+          left: 0;
+          width: 100%;
+          height: 100%;
+          background: rgba(0, 0, 0, 0.8);
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          z-index: 999999999;
+          font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+          animation: stayzen-pomodoro-fadeIn 0.3s ease-out;
+        }
+        
+        @keyframes stayzen-pomodoro-fadeIn {
+          from { opacity: 0; }
+          to { opacity: 1; }
+        }
+        
+        @keyframes stayzen-pomodoro-popIn {
+          0% { transform: scale(0.5); opacity: 0; }
+          50% { transform: scale(1.05); }
+          100% { transform: scale(1); opacity: 1; }
+        }
+        
+        @keyframes stayzen-pomodoro-pulse {
+          0%, 100% { transform: scale(1); }
+          50% { transform: scale(1.1); }
+        }
+        
+        .stayzen-pomodoro-content {
+          background: #ffffff;
+          border-radius: 16px;
+          max-width: 480px;
+          width: 90%;
+          padding: 40px 32px;
+          box-shadow: 0 20px 60px rgba(0, 0, 0, 0.4);
+          text-align: center;
+          animation: stayzen-pomodoro-popIn 0.4s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+        }
+        
+        .stayzen-pomodoro-icon-wrapper {
+          width: 80px;
+          height: 80px;
+          background: ${iconColor};
+          border-radius: 50%;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          margin: 0 auto 24px;
+          animation: stayzen-pomodoro-pulse 1.5s ease-in-out infinite;
+        }
+        
+        .stayzen-pomodoro-icon {
+          font-size: 40px;
+          filter: drop-shadow(0 2px 4px rgba(0,0,0,0.1));
+        }
+        
+        .stayzen-pomodoro-title {
+          font-size: 28px;
+          font-weight: 700;
+          color: #1C1E21;
+          margin: 0 0 16px;
+          line-height: 1.2;
+        }
+        
+        .stayzen-pomodoro-duration {
+          font-size: 16px;
+          color: #65676B;
+          margin: 0 0 20px;
+          font-weight: 500;
+        }
+        
+        .stayzen-pomodoro-message {
+          background: linear-gradient(135deg, #F0F2F5 0%, #E4E6EB 100%);
+          border-left: 4px solid ${iconColor};
+          padding: 20px 24px;
+          border-radius: 12px;
+          font-size: 16px;
+          line-height: 1.7;
+          color: #1C1E21;
+          margin: 0 0 32px;
+          text-align: left;
+          font-weight: 500;
+        }
+        
+        .stayzen-pomodoro-buttons {
+          display: flex;
+          gap: 12px;
+        }
+        
+        .stayzen-pomodoro-button {
+          background: ${buttonColor};
+          color: white;
+          border: none;
+          padding: 14px 32px;
+          border-radius: 10px;
+          font-size: 16px;
+          font-weight: 700;
+          cursor: pointer;
+          transition: all 0.2s;
+          flex: 1;
+          box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+        }
+        
+        .stayzen-pomodoro-button:hover {
+          background: ${buttonHoverColor};
+          transform: translateY(-2px);
+          box-shadow: 0 6px 20px rgba(0, 0, 0, 0.2);
+        }
+        
+        .stayzen-pomodoro-button:active {
+          transform: translateY(0);
+        }
+        
+        .stayzen-pomodoro-secondary {
+          background: #E4E6EB;
+          color: #1C1E21;
+          box-shadow: none;
+        }
+        
+        .stayzen-pomodoro-secondary:hover {
+          background: #D8DADF;
+        }
+      </style>
+      
+      <div class="stayzen-pomodoro-content">
+        <div class="stayzen-pomodoro-icon-wrapper">
+          <div class="stayzen-pomodoro-icon">${icon}</div>
+        </div>
+        <h2 class="stayzen-pomodoro-title">${title}</h2>
+        <p class="stayzen-pomodoro-duration">Session completed: ${duration} minutes</p>
+        <div class="stayzen-pomodoro-message">${message}</div>
+        <div class="stayzen-pomodoro-buttons">
+          <button class="stayzen-pomodoro-button stayzen-pomodoro-secondary" id="stayzen-pomodoro-dismiss">
+            Close
+          </button>
+          <button class="stayzen-pomodoro-button" id="stayzen-pomodoro-continue">
+            ${isBreak ? "Let's Focus!" : "Take a Break"}
+          </button>
+        </div>
+      </div>
+    `;
+    
+    document.body.appendChild(modalOverlay);
+    
+    // Add event listeners
+    const dismissBtn = document.getElementById('stayzen-pomodoro-dismiss');
+    const continueBtn = document.getElementById('stayzen-pomodoro-continue');
+    const closeModal = () => modalOverlay.remove();
+    
+    dismissBtn.addEventListener('click', closeModal);
+    continueBtn.addEventListener('click', closeModal);
+    modalOverlay.addEventListener('click', (e) => {
+      if (e.target === modalOverlay) closeModal();
+    });
+    
+    // Auto-close after 15 seconds
+    setTimeout(closeModal, 15000);
+    
+    console.log(`StayZen: Pomodoro modal shown (${type})`);
   }
 
   /**

@@ -9,7 +9,11 @@ const breakTimeInput = document.getElementById('breakTime');
 const warningTimeInput = document.getElementById('warningTime');
 const enableWarningsCheckbox = document.getElementById('enableWarnings');
 const customQuoteTextarea = document.getElementById('customQuote');
+const pomodoroFocusQuoteTextarea = document.getElementById('pomodoroFocusQuote');
+const pomodoroBreakQuoteTextarea = document.getElementById('pomodoroBreakQuote');
 const quoteCharCount = document.getElementById('quoteCharCount');
+const focusQuoteCharCount = document.getElementById('focusQuoteCharCount');
+const breakQuoteCharCount = document.getElementById('breakQuoteCharCount');
 const saveBtn = document.getElementById('saveBtn');
 const resetBtn = document.getElementById('resetBtn');
 const saveStatus = document.getElementById('saveStatus');
@@ -20,7 +24,9 @@ const DEFAULT_SETTINGS = {
   breakTime: 5,
   warningTime: 5,
   enableWarnings: true,
-  customQuote: "🧘 Take a deep breath. Focus on what truly matters."
+  customQuote: "🧘 Take a deep breath. Focus on what truly matters.",
+  pomodoroBreakQuote: "🌸 Take a moment to breathe. You've earned this rest.",
+  pomodoroFocusQuote: "🚀 Ready to conquer your goals? Let's focus and make it happen!"
 };
 
 /**
@@ -46,6 +52,8 @@ async function loadSettings() {
         ? settings.enableWarnings 
         : DEFAULT_SETTINGS.enableWarnings;
       customQuoteTextarea.value = settings.customQuote || DEFAULT_SETTINGS.customQuote;
+      pomodoroFocusQuoteTextarea.value = settings.pomodoroFocusQuote || DEFAULT_SETTINGS.pomodoroFocusQuote;
+      pomodoroBreakQuoteTextarea.value = settings.pomodoroBreakQuote || DEFAULT_SETTINGS.pomodoroBreakQuote;
       updateCharCount();
     } else {
       await saveSettings(DEFAULT_SETTINGS);
@@ -66,7 +74,9 @@ async function saveSettings(customSettings = null) {
       breakTime: parseInt(breakTimeInput.value),
       warningTime: parseInt(warningTimeInput.value),
       enableWarnings: enableWarningsCheckbox.checked,
-      customQuote: customQuoteTextarea.value.trim() || DEFAULT_SETTINGS.customQuote
+      customQuote: customQuoteTextarea.value.trim() || DEFAULT_SETTINGS.customQuote,
+      pomodoroFocusQuote: pomodoroFocusQuoteTextarea.value.trim() || DEFAULT_SETTINGS.pomodoroFocusQuote,
+      pomodoroBreakQuote: pomodoroBreakQuoteTextarea.value.trim() || DEFAULT_SETTINGS.pomodoroBreakQuote
     };
 
     // Validate inputs
@@ -82,8 +92,8 @@ async function saveSettings(customSettings = null) {
       showStatus('Warning time must be between 1-240 minutes', 'error');
       return;
     }
-    if (settings.customQuote.length > 200) {
-      showStatus('Quote must be 200 characters or less', 'error');
+    if (settings.customQuote.length > 200 || settings.pomodoroFocusQuote.length > 200 || settings.pomodoroBreakQuote.length > 200) {
+      showStatus('Quotes must be 200 characters or less', 'error');
       return;
     }
 
@@ -109,6 +119,8 @@ async function resetSettings() {
     warningTimeInput.value = DEFAULT_SETTINGS.warningTime;
     enableWarningsCheckbox.checked = DEFAULT_SETTINGS.enableWarnings;
     customQuoteTextarea.value = DEFAULT_SETTINGS.customQuote;
+    pomodoroFocusQuoteTextarea.value = DEFAULT_SETTINGS.pomodoroFocusQuote;
+    pomodoroBreakQuoteTextarea.value = DEFAULT_SETTINGS.pomodoroBreakQuote;
     updateCharCount();
     
     await saveSettings(DEFAULT_SETTINGS);
@@ -123,6 +135,14 @@ function updateCharCount() {
   const count = customQuoteTextarea.value.length;
   quoteCharCount.textContent = count;
   quoteCharCount.style.color = count > 200 ? '#E4294B' : '#65676B';
+  
+  const focusCount = pomodoroFocusQuoteTextarea.value.length;
+  focusQuoteCharCount.textContent = focusCount;
+  focusQuoteCharCount.style.color = focusCount > 200 ? '#E4294B' : '#65676B';
+  
+  const breakCount = pomodoroBreakQuoteTextarea.value.length;
+  breakQuoteCharCount.textContent = breakCount;
+  breakQuoteCharCount.style.color = breakCount > 200 ? '#E4294B' : '#65676B';
 }
 
 /**
@@ -144,6 +164,8 @@ function setupEventListeners() {
   saveBtn.addEventListener('click', () => saveSettings());
   resetBtn.addEventListener('click', resetSettings);
   customQuoteTextarea.addEventListener('input', updateCharCount);
+  pomodoroFocusQuoteTextarea.addEventListener('input', updateCharCount);
+  pomodoroBreakQuoteTextarea.addEventListener('input', updateCharCount);
   
   // Save on Enter key (except textarea)
   [focusTimeInput, breakTimeInput, warningTimeInput].forEach(input => {

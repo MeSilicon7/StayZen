@@ -6,12 +6,13 @@ Stay calm, stay focused. StayZen gently blocks noise from your digital world and
 
 - **🚫 Site Blocker** — Block distracting websites with a calming "Focus Mode" message
 - **🖼️ Image Blocker** — Hide images and background images to reduce visual noise
-- **⏱️ Pomodoro Timer** — Customizable focus sessions and break durations
-- **📊 Site Usage Tracker** — Beautiful modal alerts when spending too much time on a site
-- **💬 Custom Quotes** — Set your own inspirational message for time warnings
+- **⏱️ Pomodoro Timer** — Customizable focus sessions with beautiful completion modals
+- **📊 Site Usage Tracker** — Elegant modal alerts when spending too much time on a site
+- **💬 Custom Quotes** — Personalize all notification messages (site warnings, break time, focus time)
 - **📈 Daily Stats** — Track your focus time and productivity
-- **🔔 Smart Notifications** — Alerts for Pomodoro sessions
+- **🔔 Smart Notifications** — Beautiful SweetAlert2-style modals + browser notifications
 - **🎨 Modern Design** — Clean, minimal interface with Facebook-inspired colors
+- **⚡ Zero Dependencies** — Pure JavaScript, no external libraries required
 
 ## 🚀 Installation
 
