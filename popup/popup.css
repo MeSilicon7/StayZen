@@ -6,9 +6,9 @@
 
 body {
   width: 360px;
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, sans-serif;
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-  color: #333;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+  background: linear-gradient(135deg, #1877F2 0%, #0C63D4 100%);
+  color: #1C1E21;
 }
 
 .container {
@@ -18,25 +18,46 @@ body {
 }
 
 header {
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  background: linear-gradient(135deg, #1877F2 0%, #0C63D4 100%);
   color: white;
   padding: 20px;
   text-align: center;
+  position: relative;
 }
 
 header h1 {
   font-size: 24px;
   margin-bottom: 5px;
+  font-weight: 700;
 }
 
 .tagline {
   font-size: 12px;
-  opacity: 0.9;
+  opacity: 0.95;
+  font-weight: 400;
+}
+
+.settings-btn {
+  position: absolute;
+  top: 20px;
+  right: 20px;
+  background: rgba(255, 255, 255, 0.2);
+  border: none;
+  padding: 8px 12px;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 18px;
+  transition: all 0.2s;
+}
+
+.settings-btn:hover {
+  background: rgba(255, 255, 255, 0.3);
+  transform: scale(1.05);
 }
 
 section {
   padding: 20px;
-  border-bottom: 1px solid #eee;
+  border-bottom: 1px solid #E4E6EB;
 }
 
 section:last-child {
@@ -46,20 +67,21 @@ section:last-child {
 /* Timer Section */
 .timer-section {
   text-align: center;
-  background: #f8f9fa;
+  background: #F0F2F5;
 }
 
 .timer-display {
   font-size: 48px;
-  font-weight: bold;
-  color: #667eea;
+  font-weight: 700;
+  color: #1877F2;
   margin-bottom: 10px;
 }
 
 .timer-label {
   font-size: 14px;
-  color: #666;
+  color: #65676B;
   margin-bottom: 15px;
+  font-weight: 500;
 }
 
 .timer-controls {
@@ -72,29 +94,29 @@ section:last-child {
 .btn {
   padding: 10px 20px;
   border: none;
-  border-radius: 6px;
+  border-radius: 8px;
   cursor: pointer;
   font-size: 14px;
-  font-weight: 500;
+  font-weight: 600;
   transition: all 0.2s;
 }
 
 .btn-primary {
-  background: #667eea;
+  background: #1877F2;
   color: white;
 }
 
 .btn-primary:hover {
-  background: #5568d3;
+  background: #166FE5;
 }
 
 .btn-secondary {
-  background: #e0e0e0;
-  color: #666;
+  background: #E4E6EB;
+  color: #1C1E21;
 }
 
 .btn-secondary:hover:not(:disabled) {
-  background: #d0d0d0;
+  background: #D8DADF;
 }
 
 .btn:disabled {
@@ -124,18 +146,20 @@ section:last-child {
   width: 40px;
   height: 20px;
   cursor: pointer;
+  accent-color: #1877F2;
 }
 
 .toggle-text {
   font-size: 14px;
-  font-weight: 500;
+  font-weight: 600;
 }
 
 /* Blocked Sites */
 .blocked-sites h3 {
   font-size: 16px;
   margin-bottom: 15px;
-  color: #333;
+  color: #1C1E21;
+  font-weight: 700;
 }
 
 .add-site {
@@ -147,9 +171,14 @@ section:last-child {
 .add-site input {
   flex: 1;
   padding: 8px 12px;
-  border: 1px solid #ddd;
-  border-radius: 6px;
+  border: 1px solid #CED0D4;
+  border-radius: 8px;
   font-size: 13px;
+}
+
+.add-site input:focus {
+  outline: none;
+  border-color: #1877F2;
 }
 
 .site-list {
@@ -163,8 +192,8 @@ section:last-child {
   justify-content: space-between;
   align-items: center;
   padding: 8px 12px;
-  background: #f8f9fa;
-  border-radius: 6px;
+  background: #F0F2F5;
+  border-radius: 8px;
   margin-bottom: 8px;
   font-size: 13px;
 }
@@ -174,24 +203,26 @@ section:last-child {
 }
 
 .remove-btn {
-  background: #ff6b6b;
+  background: #E4294B;
   color: white;
   border: none;
   padding: 4px 10px;
   border-radius: 4px;
   cursor: pointer;
   font-size: 12px;
+  font-weight: 600;
 }
 
 .remove-btn:hover {
-  background: #ff5252;
+  background: #D02644;
 }
 
 /* Stats Section */
 .stats-section h3 {
   font-size: 16px;
   margin-bottom: 15px;
-  color: #333;
+  color: #1C1E21;
+  font-weight: 700;
 }
 
 .stat-item {
@@ -202,10 +233,10 @@ section:last-child {
 }
 
 .stat-label {
-  color: #666;
+  color: #65676B;
 }
 
 .stat-value {
-  font-weight: 600;
-  color: #667eea;
+  font-weight: 700;
+  color: #1877F2;
 }

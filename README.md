@@ -6,10 +6,12 @@ Stay calm, stay focused. StayZen gently blocks noise from your digital world and
 
 - **🚫 Site Blocker** — Block distracting websites with a calming "Focus Mode" message
 - **🖼️ Image Blocker** — Hide images and background images to reduce visual noise
-- **⏱️ Pomodoro Timer** — 25-minute focus sessions with 5-minute breaks
-- **📊 Site Usage Tracker** — Get warnings when spending too much time on a site
+- **⏱️ Pomodoro Timer** — Customizable focus sessions and break durations
+- **📊 Site Usage Tracker** — Beautiful modal alerts when spending too much time on a site
+- **💬 Custom Quotes** — Set your own inspirational message for time warnings
 - **📈 Daily Stats** — Track your focus time and productivity
-- **🔔 Smart Notifications** — Alerts for Pomodoro sessions and time warnings
+- **🔔 Smart Notifications** — Alerts for Pomodoro sessions
+- **🎨 Modern Design** — Clean, minimal interface with Facebook-inspired colors
 
 ## 🚀 Installation
 
@@ -52,6 +54,19 @@ Stay calm, stay focused. StayZen gently blocks noise from your digital world and
 1. Toggle "Block Images" in the popup
 2. All images will be hidden on current and future pages
 3. Toggle off to show images again
+
+### Settings
+1. Click the ⚙️ settings button in the popup (or right-click extension icon → Manage Extension → Options)
+2. Customize:
+   - **Pomodoro Timer:** Focus duration (1-120 min) and break duration (1-60 min)
+   - **Site Tracker:** Warning time threshold (1-240 min) and enable/disable warnings
+3. Click "Save Settings"
+
+**Popular Pomodoro Presets:**
+- **Standard:** 25 min focus / 5 min break
+- **Extended:** 50 min focus / 10 min break  
+- **Short Bursts:** 15 min focus / 3 min break
+- **Deep Work:** 90 min focus / 15 min break
 
 ### Stats
 - View your daily focus time in the popup

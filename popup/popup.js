@@ -14,6 +14,7 @@ const addSiteBtn = document.getElementById('addSiteBtn');
 const siteList = document.getElementById('siteList');
 const focusTimeEl = document.getElementById('focusTime');
 const sitesBlockedEl = document.getElementById('sitesBlocked');
+const settingsBtn = document.getElementById('settingsBtn');
 
 /**
  * Initialize popup
@@ -79,6 +80,7 @@ function setupEventListeners() {
   stopBtn.addEventListener('click', stopPomodoro);
   imageToggle.addEventListener('change', toggleImageBlocking);
   addSiteBtn.addEventListener('click', addBlockedSite);
+  settingsBtn.addEventListener('click', openSettings);
   siteInput.addEventListener('keypress', (e) => {
     if (e.key === 'Enter') addBlockedSite();
   });
@@ -184,6 +186,13 @@ function renderBlockedSites(sites) {
     });
     siteList.appendChild(li);
   });
+}
+
+/**
+ * Open settings page
+ */
+function openSettings() {
+  browser.runtime.openOptionsPage();
 }
 
 // Initialize on load

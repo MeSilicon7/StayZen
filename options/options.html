@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>StayZen Settings</title>
+  <link rel="stylesheet" href="options.css">
+</head>
+<body>
+  <div class="container">
+    <header>
+      <h1>🧘 StayZen Settings</h1>
+      <p class="subtitle">Customize your focus experience</p>
+    </header>
+
+    <main>
+      <!-- Pomodoro Settings -->
+      <section class="settings-section">
+        <h2>⏱️ Pomodoro Timer</h2>
+        <div class="setting-item">
+          <label for="focusTime">
+            <span class="label-text">Focus Duration (minutes)</span>
+            <span class="label-description">How long should each focus session last?</span>
+          </label>
+          <input type="number" id="focusTime" min="1" max="120" value="25">
+        </div>
+
+        <div class="setting-item">
+          <label for="breakTime">
+            <span class="label-text">Break Duration (minutes)</span>
+            <span class="label-description">How long should breaks last?</span>
+          </label>
+          <input type="number" id="breakTime" min="1" max="60" value="5">
+        </div>
+      </section>
+
+      <!-- Site Usage Tracker Settings -->
+      <section class="settings-section">
+        <h2>📊 Site Usage Tracker</h2>
+        <div class="setting-item">
+          <label for="warningTime">
+            <span class="label-text">Warning Time (minutes)</span>
+            <span class="label-description">Show warning after spending this much time on a site</span>
+          </label>
+          <input type="number" id="warningTime" min="1" max="240" value="5">
+        </div>
+
+        <div class="setting-item">
+          <label class="checkbox-label">
+            <input type="checkbox" id="enableWarnings" checked>
+            <span class="label-text">Enable time warnings</span>
+          </label>
+        </div>
+
+        <div class="setting-item">
+          <label for="customQuote">
+            <span class="label-text">Custom Inspirational Quote</span>
+            <span class="label-description">This message will appear when the time warning shows</span>
+          </label>
+          <textarea 
+            id="customQuote" 
+            rows="3" 
+            placeholder="🧘 Take a deep breath. Focus on what truly matters."
+            maxlength="200"></textarea>
+          <span class="char-count"><span id="quoteCharCount">0</span>/200</span>
+        </div>
+      </section>
+
+      <!-- Save Section -->
+      <section class="save-section">
+        <button id="saveBtn" class="btn btn-primary">Save Settings</button>
+        <button id="resetBtn" class="btn btn-secondary">Reset to Defaults</button>
+        <div id="saveStatus" class="save-status"></div>
+      </section>
+
+      <!-- Info Section -->
+      <section class="info-section">
+        <h3>💡 Tips</h3>
+        <ul>
+          <li><strong>Standard Pomodoro:</strong> 25 minutes focus, 5 minutes break</li>
+          <li><strong>Extended Focus:</strong> Try 50 minutes focus, 10 minutes break</li>
+          <li><strong>Short Bursts:</strong> 15 minutes focus, 3 minutes break for quick tasks</li>
+          <li><strong>Deep Work:</strong> 90 minutes focus, 15 minutes break for complex projects</li>
+        </ul>
+      </section>
+    </main>
+  </div>
+
+  <script src="options.js"></script>
+</body>
+</html>
