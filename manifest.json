@@ -11,7 +11,10 @@
     "tabs",
     "activeTab",
     "notifications",
-    "webRequest"
+    "webRequest",
+    "webRequestBlocking",
+    "declarativeNetRequest",
+    "declarativeNetRequestWithHostAccess"
   ],
   "host_permissions": [
     "<all_urls>"
@@ -29,7 +32,8 @@
     {
       "matches": ["<all_urls>"],
       "js": ["content/blocker.js", "content/tracker.js"],
-      "run_at": "document_start"
+      "run_at": "document_start",
+      "all_frames": false
     }
   ],
   "options_ui": {

@@ -24,6 +24,7 @@ let pomodoroFocusQuote = ""; // Custom quote for focus time
 let blockerQuote = ""; // Custom quote for blocked sites
 let autoBlockImages = false; // Auto-block images setting
 let autoBlockTimer = null; // Timer for auto-blocking images
+let imageBlockingEnabled = false; // Track image blocking state
 
 // Default inspirational quotes
 const defaultQuote = "Take a deep breath. Focus on what truly matters.";
@@ -35,7 +36,7 @@ const defaultBlockerQuote = "Take a deep breath. This is your time to focus on w
  * Load settings from storage
  */
 async function loadSettings() {
-  const { settings } = await browser.storage.local.get('settings');
+  const { settings, imageBlockingEnabled: imgBlockEnabled } = await browser.storage.local.get(['settings', 'imageBlockingEnabled']);
   
   if (settings) {
     pomodoroState.focusTime = (settings.focusTime || 25) * 60;
@@ -53,7 +54,44 @@ async function loadSettings() {
       pomodoroState.remainingTime = pomodoroState.focusTime;
     }
     
-    console.log(`StayZen: Settings loaded - Auto-block images: ${autoBlockImages}`);
+    imageBlockingEnabled = imgBlockEnabled || false;
+    updateImageBlocking();
+    
+    console.log(`StayZen: Settings loaded - Auto-block images: ${autoBlockImages}, Image blocking: ${imageBlockingEnabled}`);
+  }
+}
+
+/**
+ * WebRequest listener for blocking images
+ */
+function onBeforeRequestListener(details) {
+  // Only block image requests when image blocking is enabled
+  if (imageBlockingEnabled && details.type === 'image') {
+    console.log(`StayZen: Blocked image request: ${details.url}`);
+    return { cancel: true };
+  }
+  return { cancel: false };
+}
+
+/**
+ * Update image blocking via webRequest API
+ */
+function updateImageBlocking() {
+  // Remove existing listener
+  if (browser.webRequest.onBeforeRequest.hasListener(onBeforeRequestListener)) {
+    browser.webRequest.onBeforeRequest.removeListener(onBeforeRequestListener);
+  }
+  
+  // Add listener if blocking is enabled
+  if (imageBlockingEnabled) {
+    browser.webRequest.onBeforeRequest.addListener(
+      onBeforeRequestListener,
+      { urls: ["<all_urls>"], types: ["image"] },
+      ["blocking"]
+    );
+    console.log('StayZen: Image blocking enabled at network level');
+  } else {
+    console.log('StayZen: Image blocking disabled at network level');
   }
 }
 
@@ -384,7 +422,9 @@ function startAutoBlockTimer() {
   
   autoBlockTimer = setTimeout(async () => {
     // Re-enable image blocking
+    imageBlockingEnabled = true;
     await browser.storage.local.set({ imageBlockingEnabled: true });
+    updateImageBlocking();
     
     // Notify all tabs to block images
     const tabs = await browser.tabs.query({});
@@ -443,6 +483,9 @@ browser.runtime.onMessage.addListener((message, sender, sendResponse) => {
       break;
       
     case 'imageBlockingChanged':
+      imageBlockingEnabled = message.enabled;
+      updateImageBlocking();
+      
       if (message.enabled) {
         // Images are being blocked, cancel timer
         cancelAutoBlockTimer();
