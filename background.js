@@ -109,10 +109,11 @@ function startPomodoro() {
     // Update badge with remaining minutes
     const minutes = Math.ceil(pomodoroState.remainingTime / 60);
     browser.action.setBadgeText({ text: `${minutes}` });
-    browser.action.setBadgeBackgroundColor({ color: pomodoroState.isBreak ? '#4CAF50' : '#1877F2' });
+    browser.action.setBadgeBackgroundColor({ color: pomodoroState.isBreak ? '#42B883' : '#1877F2' });
     
     if (pomodoroState.remainingTime <= 0) {
       clearInterval(timerInterval);
+      timerInterval = null;
       pomodoroState.isRunning = false;
       
       if (pomodoroState.isBreak) {
@@ -147,6 +148,24 @@ function startPomodoro() {
       browser.action.setBadgeText({ text: '' });
     }
   }, 1000);
+}
+
+function stopPomodoro() {
+  // Clear the interval first
+  if (timerInterval) {
+    clearInterval(timerInterval);
+    timerInterval = null;
+  }
+  
+  // Reset state
+  pomodoroState.isRunning = false;
+  pomodoroState.isBreak = false;
+  pomodoroState.remainingTime = pomodoroState.focusTime;
+  
+  // Clear badge
+  browser.action.setBadgeText({ text: '' });
+  
+  console.log('StayZen: Pomodoro stopped and reset');
 }
 
 /**
