@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>StayZen</title>
+  <link rel="stylesheet" href="popup.css">
+</head>
+<body>
+  <div class="container">
+    <header>
+      <h1>🧘 StayZen</h1>
+      <p class="tagline">Stay calm, stay focused</p>
+    </header>
+
+    <!-- Pomodoro Timer -->
+    <section class="timer-section">
+      <div class="timer-display" id="timerDisplay">25:00</div>
+      <div class="timer-label" id="timerLabel">Focus Time</div>
+      <div class="timer-controls">
+        <button id="startBtn" class="btn btn-primary">Start</button>
+        <button id="stopBtn" class="btn btn-secondary" disabled>Stop</button>
+      </div>
+    </section>
+
+    <!-- Image Blocking Toggle -->
+    <section class="toggle-section">
+      <label class="toggle-label">
+        <input type="checkbox" id="imageToggle">
+        <span class="toggle-text">Block Images</span>
+      </label>
+    </section>
+
+    <!-- Blocked Sites Management -->
+    <section class="blocked-sites">
+      <h3>Blocked Sites</h3>
+      <div class="add-site">
+        <input type="text" id="siteInput" placeholder="example.com">
+        <button id="addSiteBtn" class="btn btn-small">Add</button>
+      </div>
+      <ul id="siteList" class="site-list"></ul>
+    </section>
+
+    <!-- Daily Stats -->
+    <section class="stats-section">
+      <h3>Today's Stats</h3>
+      <div class="stat-item">
+        <span class="stat-label">Focus Time:</span>
+        <span class="stat-value" id="focusTime">0 min</span>
+      </div>
+      <div class="stat-item">
+        <span class="stat-label">Sites Blocked:</span>
+        <span class="stat-value" id="sitesBlocked">0</span>
+      </div>
+    </section>
+  </div>
+
+  <script src="popup.js"></script>
+</body>
+</html>
