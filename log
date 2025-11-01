@@ -1,0 +1,44 @@
+The "data_collection_permissions" property is missing.
+
+Warning: The "/browser_specific_settings/gecko/data_collection_permissions" property is required for all new Firefox extensions, and will be required for new versions of existing extensions in the future. Please add this key to the manifest. More information at: https://mzl.la/firefox-builtin-data-consent
+manifest.json
+The size of the icon does not match the manifest.
+
+Warning: Expected icon at "icons/icon-128.png" to be 128 pixels wide but was 1024.
+manifest.json
+The size of the icon does not match the manifest.
+
+Warning: Expected icon at "icons/icon-128.png" to be 128 pixels wide but was 1024.
+manifest.json
+action.setBadgeText is not supported
+
+Warning: This API has not been implemented by Firefox.
+background.js line 157 column 5
+action.setBadgeBackgroundColor is not supported
+
+Warning: This API has not been implemented by Firefox.
+background.js line 158 column 5
+action.setBadgeText is not supported
+
+Warning: This API has not been implemented by Firefox.
+background.js line 194 column 7
+action.setBadgeText is not supported
+
+Warning: This API has not been implemented by Firefox.
+background.js line 212 column 3
+Unsafe assignment to innerHTML
+
+Warning: Due to both security and performance concerns, this may not be set using dynamic values which have not been adequately sanitized. This can lead to security issues or fairly serious performance degradation.
+content/blocker.js line 48 column 5
+Unsafe assignment to innerHTML
+
+Warning: Due to both security and performance concerns, this may not be set using dynamic values which have not been adequately sanitized. This can lead to security issues or fairly serious performance degradation.
+content/tracker.js line 48 column 5
+Unsafe assignment to innerHTML
+
+Warning: Due to both security and performance concerns, this may not be set using dynamic values which have not been adequately sanitized. This can lead to security issues or fairly serious performance degradation.
+content/tracker.js line 200 column 5
+Unsafe assignment to innerHTML
+
+Warning: Due to both security and performance concerns, this may not be set using dynamic values which have not been adequately sanitized. This can lead to security issues or fairly serious performance degradation.
+popup/popup.js line 186 column 5
